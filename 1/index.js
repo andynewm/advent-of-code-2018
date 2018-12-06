@@ -1,14 +1,27 @@
-const fs = require('fs');
-const { partOne } = require('./partOne');
-const { partTwo } = require('./partTwo');
+const run = require('../run');
 
-if (!fs.existsSync('input.txt')) {
-  throw new Error(
-    "'input.txt' not found. Visit https://adventofcode.com to download"
-  );
+function* repeat(array) {
+  while (true) yield* array;
 }
 
-const input = fs.readFileSync('input.txt', 'utf8');
+const partOne = input =>
+  input
+    .split('\n')
+    .map(Number)
+    .reduce((total, n) => total + n);
 
-console.log(`Part one: ${partOne(input)}`);
-console.log(`Part two: ${partTwo(input)}`);
+const partTwo = input => {
+  const set = new Set();
+  let frequency = 0;
+
+  for (let n of repeat(input.split('\n').map(Number))) {
+    set.add(frequency);
+    frequency += n;
+
+    if (set.has(frequency)) {
+      return frequency;
+    }
+  }
+};
+
+run(partOne, partTwo);
